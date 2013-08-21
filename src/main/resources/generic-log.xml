@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=" http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd"
+	default-lazy-init="true">
+
+	<description>日志和异常的配置 </description>
+
+	<!-- 消息Queue管理器 -->
+	<bean class="framework.generic.mybatis.queue.QueuesHolder">
+		<!-- 设置每个队列的最大长度, 默认为Integer最大值, 设置时不改变已创建队列的最大长度. -->
+		<property name="queueSize" value="3000" />
+	</bean>
+
+	<!-- 日志处理 -->
+	<bean id="loggingManager" class="framework.generic.mybatis.log.LoggingManager">
+		<property name="queueName" value="dblog" />
+		<!-- 线程等待处理的时间，单位毫秒 -->
+		<property name="period" value="28000" />
+		<!-- 批量定时读取消息的队列大小.并处理 -->
+		<property name="batchSize" value="10" />
+	</bean>
+
+	<!-- 异常处理 -->
+	<bean id="exceptionManager" class="framework.generic.mybatis.exception.ExceptionManager">
+		<property name="queueName" value="dbexception" />
+		<!-- 线程等待处理的时间，单位毫秒 -->
+		<property name="period" value="30000" />
+		<!-- 批量定时读取消息的队列大小.并处理 -->
+		<property name="batchSize" value="10" />
+	</bean>
+
+</beans>
